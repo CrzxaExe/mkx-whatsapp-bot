@@ -1,0 +1,1 @@
+{"bot":{"prefix":"mkx","version":"0.1.1"},"template":{"helpAll":"MKx's help\n\nMKx is an automation program created by Khyro Industry From Zxra\nProvided command to easier you life","helpDetail":"%cmd Detail\n> Alias: %alias\n\n%description\n\nUsage: %usage","menu":"Mkx Bot\n> By Khyro Industry\n\n```Easier your life with us```\n\nAll Commands:\n%menu\n\nv%version"}}
