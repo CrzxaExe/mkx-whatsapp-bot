@@ -1,12 +1,13 @@
 import { CommandCategories, type CommandParams } from "../types/command";
 import { Commands } from "../utils/Commands";
+import { Language } from "../utils/Language";
 import { LocalData } from "../utils/LocalData";
 
 Commands.add(
   {
     name: "menu",
     alias: [],
-    description: "Bot menu that contain all available command you can use",
+    description: "command.menu",
     category: "helper",
     args: [],
     read: true,
@@ -18,7 +19,7 @@ Commands.add(
         image: {
           url: Bun.pathToFileURL("./src/assets/menu_alt.jpg"),
         },
-        caption: LocalData._data.template.menu
+        caption: Language.get("menu")
           .replace(
             "%menu",
             Object.keys(CommandCategories)
@@ -32,7 +33,7 @@ Commands.add(
                   )
                     return;
 
-                  text += `\n- ${r.config.name}`;
+                  text += `\n- ${r.config.name}${r.config.isAdmin ? " <Admin>" : ""}`;
                 });
 
                 return text;

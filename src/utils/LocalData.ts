@@ -1,3 +1,4 @@
+import type { SettingData } from "../types/localData";
 import { Terminal } from "./Terminal";
 
 /**
@@ -9,13 +10,9 @@ class LocalData {
    */
   static _data: SettingData = {
     bot: {
-      version: "0.0.0",
+      language: "en_US",
       prefix: "mkx",
-    },
-    template: {
-      helpAll: "",
-      helpDetail: "",
-      menu: "",
+      version: "0.0.0",
     },
   };
 

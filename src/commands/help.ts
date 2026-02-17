@@ -1,20 +1,21 @@
 import type { CommandParams } from "../types/command";
 import { Commands } from "../utils/Commands";
 import { Formatter } from "../utils/Formatter";
+import { Language } from "../utils/Language";
 import { LocalData } from "../utils/LocalData";
 
 Commands.add(
   {
     name: "help",
     alias: [],
-    description: "Help you to use commands",
+    description: "command.help",
     category: "helper",
     args: ["commands"],
     read: true,
   },
   async ({ sock, key, args }: CommandParams): Promise<void> => {
     if (args.length > 0 && args[0]) {
-      const command = Commands.get(args[0]);
+      const command = Commands.get(args[0], args.slice(1));
 
       if (!command) {
         sock.sendMessage(key.remoteJid!, {
@@ -24,9 +25,9 @@ Commands.add(
       }
 
       sock.sendMessage(key.remoteJid!, {
-        text: LocalData._data.template.helpDetail
+        text: Language.get("help.detail")
           .replace("%cmd", Formatter.capitalWord(command.config.name))
-          .replace("%description", command.config.description)
+          .replace("%description", Language.get(command.config.description))
           .replace(
             "%alias",
             command.config.alias.length > 0
@@ -43,7 +44,10 @@ Commands.add(
     }
 
     sock.sendMessage(key.remoteJid!, {
-      text: LocalData._data.template.helpAll,
+      text: Language.get("help.all")
+        .replace(/%version/g, LocalData._data.bot.version)
+        .replace(/%prefix/g, LocalData._data.bot.prefix)
+        .replace(/%language/g, LocalData._data.bot.language),
     });
   },
 );

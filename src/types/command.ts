@@ -2,6 +2,7 @@ import type { proto, WAMessage } from "@whiskeysockets/baileys";
 import type makeWASocket from "@whiskeysockets/baileys";
 
 export const CommandCategories = {
+  Group: "group",
   Helper: "helper",
   Utility: "utility",
 } as const;
@@ -20,8 +21,10 @@ export type CommandConfig = {
   args: string[];
 
   // optional options
-  read?: boolean;
   isAdmin?: boolean;
+  isHidden?: boolean;
+  prevWord?: string[];
+  read?: boolean;
   withImage?: boolean;
 };
 

@@ -7,9 +7,10 @@ Commands.add(
   {
     name: "sticker",
     alias: ["stiker", "sc"],
-    description: "Create sticker from image you sended",
+    description: "command.sticker",
     category: "utility",
     args: [],
+    prevWord: ["create", "bikin", "gawe", "gawekna"],
     read: true,
     withImage: true,
   },

@@ -31,9 +31,13 @@ class Commands {
    * @param cmd command name
    * @returns CommandData or nothing
    */
-  static get(cmd: string): CommandData | undefined {
+  static get(cmd: string, args: string[]): CommandData | undefined {
     return this.data.find(
-      (e) => e.config.name === cmd || e.config.alias.includes(cmd),
+      (e) =>
+        e.config.name === cmd ||
+        e.config.alias.includes(cmd) ||
+        (e.config.prevWord?.includes(cmd) &&
+          (e.config.name === args[0] || e.config.alias.includes(args[0]!))),
     );
   }
 
@@ -44,7 +48,7 @@ class Commands {
    * @returns nothing
    */
   static async handle(cmd: string, args: CommandParams): Promise<void> {
-    const data = this.get(cmd);
+    const data = this.get(cmd, args.args);
     if (!data) return;
     if (data.config.read) args.sock.readMessages([args.key]);
 
@@ -70,6 +74,8 @@ class Commands {
 
         await import(`../commands/${file}`);
       });
+
+      Terminal.info(`Load ${files.length} commands`);
     });
   }
 }

@@ -4,6 +4,7 @@ import {
   type ConnectionState,
 } from "@whiskeysockets/baileys";
 import QRCode from "qrcode";
+import { Terminal } from "./Terminal";
 
 /**
  * Utility class to create or handle connection
@@ -24,6 +25,7 @@ class Connection {
       (lastDisconnect?.error as Boom)?.output?.statusCode ===
         DisconnectReason.restartRequired
     ) {
+      Terminal.info("Restarting");
       main();
     }
 

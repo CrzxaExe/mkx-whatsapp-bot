@@ -8,6 +8,7 @@ import { Commands } from "./src/utils/Commands";
 import pino from "pino";
 import { LocalData } from "./src/utils/LocalData";
 import { Terminal } from "./src/utils/Terminal";
+import { Language } from "./src/utils/Language";
 
 let isHearing = false;
 
@@ -33,6 +34,7 @@ async function main() {
 
   await Commands.loadCommands();
   await LocalData.loadSettings();
+  Language.load(LocalData._data.bot.language);
 
   sock.ev.on("messages.upsert", async ({ messages, type, requestId }) => {
     messages.forEach(async (message) => {
@@ -70,7 +72,11 @@ async function main() {
       );
 
       if (!cmd) {
-        sock.sendMessage(key.remoteJid, { text: "What?" }, { quoted: message });
+        sock.sendMessage(
+          key.remoteJid,
+          { text: Language.get("hearing.start", "?") },
+          { quoted: message },
+        );
         sock.readMessages([key]);
         isHearing = true;
 
@@ -83,8 +89,3 @@ async function main() {
 }
 
 main();
-
-process.on("beforeExit", (code) => {
-  Terminal.log("Saving settings, with exit code:", code);
-  LocalData.saveSettings();
-});

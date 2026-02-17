@@ -1,0 +1,25 @@
+command.group.create=Create new group
+command.group.demote=Demoting all mentioned user
+command.group.description=Change group description
+command.group.promote=Promoting all mentioned user
+command.group.subject=Change group subject
+command.help=Help you to use commands
+command.menu=Bot menu that contain all available command you can use
+command.sticker=Create sticker from image you sended
+command.test=Testing command.only
+
+group.create.greeting=Here is your brand new group
+group.demote.noMentions=Who wants to be demoted?
+group.demote.success=Mentioned users has been demoted
+group.description.change=Group description has been updated
+group.promote.noMentions=Who wants to be promoted?
+group.promote.success=Mentioned users has been promoted
+group.subject.change=Group subject has ben change, from '%old' to '%new'
+group.subject.missing=What the name of group?
+
+hearing.start=Whats?
+
+help.all=MKx's help\n\nMKx is an automation program created by Khyro Industry From Zxra\nProvided command to easier you life\n\nCurrent Bot Stat:\n> v%version\n> Prefix: %prefix\n> Language: %language
+help.detail=%cmd Detail\n> Alias: %alias\n\n%description\n\nUsage: %usage
+
+menu=Mkx Bot\n> By Khyro Industry\n\n```Easier your life with us```\n\nAll Commands:\n%menu\n\nv%version

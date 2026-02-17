@@ -5,7 +5,7 @@ Commands.add(
   {
     name: "test",
     alias: [],
-    description: "testing",
+    description: "command.test",
     category: "helper",
     args: [],
   },
