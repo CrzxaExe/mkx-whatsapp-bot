@@ -1,8 +1,8 @@
-import type { CommandParams } from "../types/command";
-import { Commands } from "../utils/Commands";
-import { Formatter } from "../utils/Formatter";
-import { Language } from "../utils/Language";
-import { LocalData } from "../utils/LocalData";
+import type { CommandParams } from "../types/command.ts";
+import { Commands } from "../utils/Commands.ts";
+import { Formatter } from "../utils/Formatter.ts";
+import { Language } from "../utils/Language.ts";
+import { LocalData } from "../utils/LocalData.ts";
 
 Commands.add(
   {

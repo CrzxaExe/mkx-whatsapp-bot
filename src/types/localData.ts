@@ -1,4 +1,4 @@
-import type { LanguageList } from "./language";
+import type { LanguageList } from "./language.ts";
 
 export type SettingData = {
   bot: {

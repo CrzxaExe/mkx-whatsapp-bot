@@ -1,6 +1,6 @@
-import type { LanguageList } from "../types/language";
-import { Reader } from "./Reader";
-import { Terminal } from "./Terminal";
+import type { LanguageList } from "../types/language.ts";
+import { Reader } from "./Reader.ts";
+import { Terminal } from "./Terminal.ts";
 
 class Language {
   static _data: Record<string, string> = {};

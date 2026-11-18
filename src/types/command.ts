@@ -1,7 +1,7 @@
-import type { proto, WAMessage } from "@whiskeysockets/baileys";
-import type makeWASocket from "@whiskeysockets/baileys";
+import { proto, makeWASocket, type WAMessage } from "@whiskeysockets/baileys";
 
 export const CommandCategories = {
+  Configuration: "configuration",
   Group: "group",
   Helper: "helper",
   Utility: "utility",
@@ -23,6 +23,7 @@ export type CommandConfig = {
   // optional options
   isAdmin?: boolean;
   isHidden?: boolean;
+  useCode?: boolean;
   prevWord?: string[];
   read?: boolean;
   withImage?: boolean;
@@ -36,10 +37,27 @@ export type CommandData = {
   callback: CommandCallback;
 };
 
+/**
+ * Parameter of the command
+ */
 export type CommandParams = {
+  /**
+   * Content message
+   */
   content: proto.Message.IImageMessage | proto.Message.IExtendedTextMessage;
+  /**
+   * Unsplited content message text or caption
+   */
+  text: string;
   sock: ReturnType<typeof makeWASocket>;
+  /**
+   * Splited CommandParams.text, has been sliced after prefix
+   */
   args: string[];
   message: WAMessage;
   key: proto.IMessageKey;
+  /**
+   * Owner code verification
+   */
+  code: string;
 };

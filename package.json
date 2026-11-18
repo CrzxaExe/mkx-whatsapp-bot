@@ -9,20 +9,25 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "@types/qrcode": "^1.5.6"
+    "@types/qrcode": "^1.5.6",
+    "ts-node": "^10.9.2"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "@hapi/boom": "^10.0.1",
+    "@jsquash/jpeg": "^1.6.0",
+    "@jsquash/png": "^3.1.1",
+    "@jsquash/resize": "^2.1.1",
+    "@jsquash/webp": "^1.5.0",
     "@whiskeysockets/baileys": "^7.0.0-rc.9",
+    "async-lock": "^1.4.1",
     "chalk": "^5.6.2",
     "fs": "^0.0.1-security",
+    "jimp": "^1.6.1",
     "pino": "^10.3.1",
     "qrcode": "^1.5.4",
-    "qrcode-terminal": "^0.12.0",
-    "sharp": "^0.34.5",
-    "wa-sticker-formatter": "^4.4.4"
+    "qrcode-terminal": "^0.12.0"
   }
 }

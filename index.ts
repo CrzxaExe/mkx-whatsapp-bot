@@ -1,16 +1,15 @@
-import makeWASocket, {
-  Browsers,
-  proto,
-  useMultiFileAuthState,
-} from "@whiskeysockets/baileys";
-import { Connection } from "./src/utils/Connection";
-import { Commands } from "./src/utils/Commands";
+import makeWASocket, { Browsers, proto } from "@whiskeysockets/baileys";
+import { Connection } from "./src/utils/Connection.ts";
+import { Commands } from "./src/utils/Commands.ts";
 import pino from "pino";
-import { LocalData } from "./src/utils/LocalData";
-import { Terminal } from "./src/utils/Terminal";
-import { Language } from "./src/utils/Language";
+import { LocalData } from "./src/utils/LocalData.ts";
+import { Terminal } from "./src/utils/Terminal.ts";
+import { Language } from "./src/utils/Language.ts";
+import { Generator } from "./src/utils/Generator.ts";
+import { useMultiFileAuthState } from "./src/utils/AuthState.ts";
 
 let isHearing = false;
+let code: string = Generator.id();
 
 /**
  * Main function
@@ -22,9 +21,13 @@ async function main() {
 
   const sock = makeWASocket({
     auth: state,
-    logger: pino({ level: "silent" }),
-    browser: Browsers.windows("mkx"),
+    printQRInTerminal: false,
+    logger: pino({ level: "debug" }),
+    browser: ["Windows", "Edge", "20.0.04"],
   });
+
+  // const ver = await sock.requestPairingCode("6289539851501");
+  // console.log(ver);
 
   sock.ev.on("connection.update", async (event) => {
     Connection.startEvent(event, main);
@@ -33,8 +36,9 @@ async function main() {
   sock.ev.on("creds.update", saveCreds);
 
   await Commands.loadCommands();
-  await LocalData.loadSettings();
+  LocalData.loadSettings();
   Language.load(LocalData._data.bot.language);
+  Terminal.info("Owner execute code:", code);
 
   sock.ev.on("messages.upsert", async ({ messages, type, requestId }) => {
     messages.forEach(async (message) => {
@@ -63,7 +67,15 @@ async function main() {
 
         if (!cmd) return;
 
-        await Commands.handle(cmd, { args, content, sock, key, message });
+        await Commands.handle(cmd, {
+          args,
+          content,
+          sock,
+          key,
+          message,
+          code,
+          text,
+        });
         return;
       }
 
@@ -72,18 +84,26 @@ async function main() {
       );
 
       if (!cmd) {
-        sock.sendMessage(
+        await sock.sendMessage(
           key.remoteJid,
           { text: Language.get("hearing.start", "?") },
           { quoted: message },
         );
-        sock.readMessages([key]);
+        await sock.readMessages([key]);
         isHearing = true;
 
         return;
       }
 
-      await Commands.handle(cmd, { args, content, sock, key, message });
+      await Commands.handle(cmd, {
+        args,
+        content,
+        sock,
+        key,
+        message,
+        code,
+        text,
+      });
     });
   });
 }

@@ -1,5 +1,6 @@
-import type { SettingData } from "../types/localData";
-import { Terminal } from "./Terminal";
+import type { SettingData } from "../types/localData.ts";
+import { Terminal } from "./Terminal.ts";
+import { readFileSync } from "fs";
 
 /**
  * Utility class to store bot data
@@ -19,12 +20,12 @@ class LocalData {
   /**
    * Loading setting from settings.json
    */
-  static async loadSettings(): Promise<void> {
+  static loadSettings(): void {
     Terminal.log("Loading settings");
 
-    const file = Bun.file("settings.json");
+    const file = readFileSync("settings.json", { encoding: "utf8" });
 
-    const json = (await file.json()) as SettingData;
+    const json = JSON.parse(file) as SettingData;
     this._data = json;
   }
 

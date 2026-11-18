@@ -1,7 +1,7 @@
 import { downloadMediaMessage, proto } from "@whiskeysockets/baileys";
-import type { CommandParams } from "../types/command";
-import { Commands } from "../utils/Commands";
-import { createSticker } from "../utils/sticker";
+import type { CommandParams } from "../types/command.ts";
+import { Commands } from "../utils/Commands.ts";
+import { createSticker } from "../utils/sticker.ts";
 
 Commands.add(
   {
@@ -17,6 +17,14 @@ Commands.add(
   async ({ sock, key, content, message }: CommandParams): Promise<void> => {
     if (!(content instanceof proto.Message.ImageMessage)) return;
 
+    await sock.sendMessage(key.remoteJid!, {
+      react: {
+        text: "👍",
+        key,
+      },
+    });
+    await sock.sendPresenceUpdate("composing", key.remoteJid!);
+
     const buffer = await downloadMediaMessage(message, "buffer", {
       options: {},
     });
@@ -29,5 +37,6 @@ Commands.add(
     await sock.sendMessage(key.remoteJid!, {
       sticker: stickerBuf,
     });
+    await sock.sendPresenceUpdate("available", key.remoteJid!);
   },
 );

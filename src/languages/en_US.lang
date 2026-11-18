@@ -1,3 +1,5 @@
+bot.general=MKx\n> Creatd by Khyro Industry\n\n%version
+
 command.group.create=Create new group
 command.group.demote=Demoting all mentioned user
 command.group.description=Change group description
@@ -16,6 +18,7 @@ group.promote.noMentions=Who wants to be promoted?
 group.promote.success=Mentioned users has been promoted
 group.subject.change=Group subject has ben change, from '%old' to '%new'
 group.subject.missing=What the name of group?
+group.not.admin=Cannot execute command, you are not admin
 
 hearing.start=Whats?
 

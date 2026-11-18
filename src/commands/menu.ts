@@ -1,7 +1,7 @@
-import { CommandCategories, type CommandParams } from "../types/command";
-import { Commands } from "../utils/Commands";
-import { Language } from "../utils/Language";
-import { LocalData } from "../utils/LocalData";
+import { CommandCategories, type CommandParams } from "../types/command.ts";
+import { Commands } from "../utils/Commands.ts";
+import { Language } from "../utils/Language.ts";
+import { LocalData } from "../utils/LocalData.ts";
 
 Commands.add(
   {

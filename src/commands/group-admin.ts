@@ -1,6 +1,6 @@
-import type { CommandParams } from "../types/command";
-import { Commands } from "../utils/Commands";
-import { Language } from "../utils/Language";
+import type { CommandParams } from "../types/command.ts";
+import { Commands } from "../utils/Commands.ts";
+import { Language } from "../utils/Language.ts";
 
 Commands.add(
   {
@@ -40,6 +40,19 @@ Commands.add(
     const newName = args.join(" ");
     const old = await sock.groupMetadata(key.remoteJid!);
 
+    if (
+      !old.participants.some(
+        (e) =>
+          e.id === key.participant &&
+          (e.admin === "admin" || e.admin === "superadmin"),
+      )
+    ) {
+      sock.sendMessage(key.remoteJid!, {
+        text: Language.get("group.not.admin"),
+      });
+      return;
+    }
+
     await sock.groupUpdateSubject(key.remoteJid!, newName);
 
     sock.sendMessage(key.remoteJid!, {
@@ -60,6 +73,21 @@ Commands.add(
     isAdmin: true,
   },
   async ({ sock, key, args }: CommandParams): Promise<void> => {
+    const group = await sock.groupMetadata(key.remoteJid!);
+
+    if (
+      !group.participants.some(
+        (e) =>
+          e.id === key.participant &&
+          (e.admin === "admin" || e.admin === "superadmin"),
+      )
+    ) {
+      sock.sendMessage(key.remoteJid!, {
+        text: Language.get("group.not.admin"),
+      });
+      return;
+    }
+
     const description = args.slice(1).join(" ");
 
     await sock.groupUpdateDescription(key.remoteJid!, description);
@@ -80,6 +108,21 @@ Commands.add(
     isAdmin: true,
   },
   async ({ sock, key, content }: CommandParams): Promise<void> => {
+    const group = await sock.groupMetadata(key.remoteJid!);
+
+    if (
+      !group.participants.some(
+        (e) =>
+          e.id === key.participant &&
+          (e.admin === "admin" || e.admin === "superadmin"),
+      )
+    ) {
+      sock.sendMessage(key.remoteJid!, {
+        text: Language.get("group.not.admin"),
+      });
+      return;
+    }
+
     const mentions = content.contextInfo?.mentionedJid ?? [];
     if (mentions.length < 1) {
       sock.sendMessage(key.remoteJid!, {
@@ -107,6 +150,21 @@ Commands.add(
     isAdmin: true,
   },
   async ({ sock, key, content }: CommandParams): Promise<void> => {
+    const group = await sock.groupMetadata(key.remoteJid!);
+
+    if (
+      !group.participants.some(
+        (e) =>
+          e.id === key.participant &&
+          (e.admin === "admin" || e.admin === "superadmin"),
+      )
+    ) {
+      sock.sendMessage(key.remoteJid!, {
+        text: Language.get("group.not.admin"),
+      });
+      return;
+    }
+
     const mentions = content.contextInfo?.mentionedJid ?? [];
     if (mentions.length < 1) {
       sock.sendMessage(key.remoteJid!, {

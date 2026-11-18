@@ -4,8 +4,9 @@ import type {
   CommandConfig,
   CommandData,
   CommandParams,
-} from "../types/command";
-import { Terminal } from "./Terminal";
+} from "../types/command.ts";
+import { Terminal } from "./Terminal.ts";
+import { Language } from "./Language.ts";
 
 /**
  * Utility class to store
@@ -51,6 +52,12 @@ class Commands {
     const data = this.get(cmd, args.args);
     if (!data) return;
     if (data.config.read) args.sock.readMessages([args.key]);
+    if (data.config.useCode && !args.text.split(" ").includes(args.code)) {
+      args.sock.sendMessage(args.key.remoteJid!, {
+        text: Language.get("command.code.required"),
+      });
+      return;
+    }
 
     data.callback(args);
   }
@@ -75,7 +82,7 @@ class Commands {
         await import(`../commands/${file}`);
       });
 
-      Terminal.info(`Load ${files.length} commands`);
+      Terminal.info(`Load ${files.length} files`);
     });
   }
 }
