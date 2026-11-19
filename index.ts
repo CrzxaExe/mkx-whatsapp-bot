@@ -7,6 +7,7 @@ import { Terminal } from "./src/utils/Terminal.ts";
 import { Language } from "./src/utils/Language.ts";
 import { Generator } from "./src/utils/Generator.ts";
 import { useMultiFileAuthState } from "./src/utils/AuthState.ts";
+import { Manager } from "./src/nlp/Manager.ts";
 
 let isHearing = false;
 let code: string = Generator.id();
@@ -22,12 +23,9 @@ async function main() {
   const sock = makeWASocket({
     auth: state,
     printQRInTerminal: false,
-    logger: pino({ level: "debug" }),
+    logger: pino({ level: "silent" }),
     browser: ["Windows", "Edge", "20.0.04"],
   });
-
-  // const ver = await sock.requestPairingCode("6289539851501");
-  // console.log(ver);
 
   sock.ev.on("connection.update", async (event) => {
     Connection.startEvent(event, main);
@@ -35,7 +33,9 @@ async function main() {
 
   sock.ev.on("creds.update", saveCreds);
 
-  await Commands.loadCommands();
+  await Commands.loadCommands(async () => {
+    await Manager.setup();
+  });
   LocalData.loadSettings();
   Language.load(LocalData._data.bot.language);
   Terminal.info("Owner execute code:", code);
@@ -44,6 +44,7 @@ async function main() {
     messages.forEach(async (message) => {
       const { message: chat, key } = message;
 
+      const prefix = LocalData._data.bot.prefix;
       const content = chat?.extendedTextMessage ?? chat?.imageMessage,
         fromMe = key.fromMe ?? true;
 
@@ -56,34 +57,11 @@ async function main() {
           : content instanceof proto.Message.ExtendedTextMessage
             ? content.text
             : undefined;
-      if (!text) return;
+      if (!text || (!isHearing && !text.includes(prefix))) return;
 
-      const splited = text.split(" ");
-      const prefix = LocalData._data.bot.prefix;
+      if (text === prefix) {
+        isHearing = true;
 
-      if (isHearing) {
-        const [cmd, ...args] = splited;
-        isHearing = false;
-
-        if (!cmd) return;
-
-        await Commands.handle(cmd, {
-          args,
-          content,
-          sock,
-          key,
-          message,
-          code,
-          text,
-        });
-        return;
-      }
-
-      const [cmd, ...args] = splited.slice(
-        splited.findIndex((e) => e.toLowerCase() === prefix) + 1,
-      );
-
-      if (!cmd) {
         await sock.sendMessage(
           key.remoteJid,
           { text: Language.get("hearing.start", "?") },
@@ -95,15 +73,32 @@ async function main() {
         return;
       }
 
-      await Commands.handle(cmd, {
-        args,
-        content,
-        sock,
-        key,
-        message,
-        code,
+      const result = await Manager.process(
+        LocalData._data.bot.system_language,
         text,
-      });
+      );
+      const intent: string = result.intent as string;
+
+      if ((result.score as number) < 0.6) return;
+      const splited = intent.split(".");
+
+      switch (splited[0]) {
+        case "command":
+          const [_intent, intentKey, ..._] = splited;
+          const args = text.split(' ').filter(e => e === prefix)
+
+          if (!intentKey) return;
+          await Commands.handle(intentKey, {
+            args,
+            content,
+            sock,
+            key,
+            message,
+            code,
+            text,
+          })
+          break;
+      }
     });
   });
 }

@@ -1,5 +1,5 @@
-export class Generator {
-  static id(length: number = 10): string {
+export const Generator = {
+  id(length: number = 10): string {
     let result = "";
     const chars =
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";

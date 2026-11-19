@@ -12,6 +12,7 @@ class LocalData {
   static _data: SettingData = {
     bot: {
       language: "en_US",
+      system_language: 'en',
       prefix: "mkx",
       version: "0.0.0",
     },

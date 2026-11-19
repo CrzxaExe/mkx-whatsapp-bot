@@ -65,7 +65,7 @@ class Commands {
   /**
    * Loading command from folders automaticly
    */
-  static async loadCommands(): Promise<void> {
+  static async loadCommands(callback?: () => void): Promise<void> {
     Terminal.log("Loading commands");
 
     readdir("./src/commands", (err, files) => {
@@ -83,7 +83,10 @@ class Commands {
       });
 
       Terminal.info(`Load ${files.length} files`);
+
     });
+
+    callback?.call(null)
   }
 }
 
